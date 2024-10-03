@@ -7,6 +7,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        openSans: ["var(--font-openSans)"],
+        fugaz: ["var(--font-fugaz)"],
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
