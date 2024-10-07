@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { gradients, baseRating } from "@/utils";
 
 const months = {
@@ -25,37 +27,57 @@ const dayList = [
   "Friday",
   "Saturday",
 ];
-export const data = {
-  15: 2,
-  16: 4,
-  17: 1,
-  18: 3,
-  19: 5,
-  20: 2,
-  21: 4,
-  22: 1,
-  23: 3,
-  24: 5,
-};
 
 export default function Calendar(props) {
-  const { demo } = props;
+  const { demo, handleSetMood, completeData } = props;
   const now = new Date();
+
   const currMonth = now.getMonth();
-  const year = 2024;
-  const month = "July";
-  const monthNow = new Date(year, Object.keys(months).indexOf(month), 1);
+  const currentYear = now.getFullYear();
+  const [selectedMonth, setSelectedMonth] = useState(
+    Object.keys(months)[currMonth]
+  );
+  const [selectedYear, setSelectedYear] = useState(currentYear);
+
+  const numericMonth = Object.keys(months).indexOf(selectedMonth);
+  const data = completeData?.[selectedYear]?.[numericMonth] || {};
+  console.log("THIS MONTHS DATA: ", data);
+
+  function handleIncrementMonth(value) {
+    // value +1 -1
+    // if hitting the bounds of the months, adjust the year that is displayed instead.
+  }
+
+  const monthNow = new Date(
+    selectedYear,
+    Object.keys(months).indexOf(selectedMonth),
+    1
+  );
   const firstDayOfMonth = monthNow.getDay();
   const daysInMonth = new Date(
-    year,
-    Object.keys(month).indexOf(month) + 1,
+    selectedYear,
+    Object.keys(selectedMonth).indexOf(selectedMonth) + 1,
     0
   ).getDate();
   const daysToDisplay = firstDayOfMonth + daysInMonth;
   const numRows = Math.floor(daysToDisplay / 7) + (daysToDisplay % 7 ? 1 : 0);
-  //console.log("daysInMonth:", daysInMonth);
+
   return (
     <div className="flex flex-col overflow-hidden gap-1 py-4 sm:py-6 md:py-10">
+      <div className="grid grid-cols-7 gap-1 mb-5 font-medium uppercase text-xs sm:text-sm font-openSans text-indigo-800">
+        {dayList.map((day, index) => {
+          return (
+            <>
+              <span className="md:hidden" key={index}>
+                {day.slice(0, 3)}
+              </span>
+              <span className="hidden md:block" key={index}>
+                {day}
+              </span>
+            </>
+          );
+        })}
+      </div>
       {[...Array(numRows).keys()].map((row, rowIndex) => {
         return (
           <div key={rowIndex} className="grid grid-cols-7 gap-1">
@@ -70,7 +92,6 @@ export default function Calendar(props) {
                   : true;
 
               let isToday = dayIndex === now.getDate();
-              console.log("dayDisplay", dayDisplay);
               if (!dayDisplay) {
                 return <div key={dayOfWeekIndex} className="bg-white" />;
               }
@@ -79,6 +100,7 @@ export default function Calendar(props) {
                 : dayIndex in data
                 ? gradients.indigo[data[dayIndex]]
                 : "white";
+
               return (
                 <div
                   className={`text-xs border p-2 flex items-center gap-2 justify-between rounded-lg ${
