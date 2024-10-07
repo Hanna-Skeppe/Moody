@@ -1,11 +1,7 @@
-//import localFont from "next/font/local";
-import "./globals.css";
-//import { Fugaz_One, Inter } from "next/font/google";
-import { fugaz, openSans } from "./fonts";
 import Link from "next/link";
-
-// const inter = Inter({ subsets: ["latin"] });
-// const fugaz = Fugaz_One({ subsets: ["latin"], weight: ["400"] });
+import { AuthProvider } from "@/context/AuthContext";
+import "./globals.css";
+import { fugaz, openSans } from "./fonts";
 
 export const metadata = {
   title: "Moody",
@@ -30,19 +26,23 @@ export default function RootLayout({ children }) {
 
   const footer = (
     <footer className="p-4 sm:p-8 grid place-items-center">
-      <p className="font-fugaz text-indigo-500">Created with 💚</p>
+      <p className="font-fugaz text-indigo-500">
+        Created by Hanna Skeppe with 💚
+      </p>
     </footer>
   );
 
   return (
     <html lang="en" className={`${openSans.variable} ${fugaz.variable}`}>
-      <body
-        className={`w-full max-w-[1000px] mx-auto text-sm sm:text-base min-h-screen flex flex-col font-openSans text-slate-800`}
-      >
-        {header}
-        {children}
-        {footer}
-      </body>
+      <AuthProvider>
+        <body
+          className={`w-full max-w-[1000px] mx-auto text-sm sm:text-base min-h-screen flex flex-col font-openSans text-slate-800`}
+        >
+          {header}
+          {children}
+          {footer}
+        </body>
+      </AuthProvider>
     </html>
   );
 }

@@ -1,6 +1,5 @@
 "use client";
 
-import { auth } from "@firebase";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -9,6 +8,7 @@ import {
 } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import React, { useState, useEffect, useContext } from "react";
+import { auth, db } from "../firebase";
 
 const AuthContext = React.createContext();
 
@@ -18,20 +18,20 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
-  const [userDataObj, setUserDataObj] = useState({});
+  const [userDataObj, setUserDataObj] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // AUTH HANDLERS
-  function signup(email, password) {
+  function signUp(email, password) {
     return createUserWithEmailAndPassword(auth, email, password);
   }
 
-  function login(email, password) {
+  function logIn(email, password) {
     return signInWithEmailAndPassword(auth, email, password);
   }
 
   function logOut() {
-    setUserDataObj({});
+    setUserDataObj(null);
     setCurrentUser(null);
     return signOut(auth);
   }
@@ -39,10 +39,11 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       try {
-        // Set the user to our local context state.
+        // Set the user to local context state.
         setLoading(true);
         setCurrentUser(user);
         if (!user) {
+          console.log("No user found!");
           return;
         }
 
@@ -66,6 +67,15 @@ export function AuthProvider({ children }) {
     return unsubscribe;
   }, []);
 
-  const value = {};
+  const value = {
+    currentUser,
+    userDataObj,
+    setUserDataObj,
+    signUp,
+    logIn,
+    logOut,
+    loading,
+  };
+
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
