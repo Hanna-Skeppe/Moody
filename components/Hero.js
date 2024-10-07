@@ -1,10 +1,11 @@
 import React from "react";
+import Link from "next/link";
 import Button from "./Button";
 import Calendar from "./Calendar";
 
 export default function Hero() {
   return (
-    <div className="py-4 md:py-10 flex flex-col gap-4 sm:gap-8">
+    <div className="py-4 md:py-10 flex flex-col gap-8 sm:gap-10">
       <h1 className="text-5xl text-center font-fugaz sm:text-6xl md:text-7xl">
         <span className="textGradient">Moody</span> helps you track your
         <span className="textGradient"> daily</span> mood!
@@ -14,8 +15,12 @@ export default function Hero() {
         <span className="font-semibold"> yearly and monthly</span> mood-trends
       </p>
       <div className="grid grid-cols-2 gap-4 w-fit mx-auto">
-        <Button text="Sign up" />
-        <Button text="Login" dark />
+        <Link href={"/dashboard"}>
+          <Button text="Sign up" />
+        </Link>
+        <Link href={"/dashboard"}>
+          <Button text="Login" dark />
+        </Link>
       </div>
       <Calendar demo />
     </div>
