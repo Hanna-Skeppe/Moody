@@ -28,7 +28,11 @@ export default function Dashboard() {
         }
       }
     }
-    const avgMood = (sumMoods / totalNumberOfDays).toFixed(1);
+
+    const avgMood =
+      sumMoods > 0 && totalNumberOfDays > 0
+        ? (sumMoods / totalNumberOfDays).toFixed(1)
+        : null;
     return { number_of_days: totalNumberOfDays, average_mood: avgMood };
   }
 
@@ -44,7 +48,6 @@ export default function Dashboard() {
   const statuses = {
     ...countValues(),
     time_remaining: `${hoursRemaining}H ${minutesRemaining}M`,
-    //date: new Date().toDateString(),
   };
 
   async function handleSetMood(mood) {
@@ -111,12 +114,20 @@ export default function Dashboard() {
       <div className="p-4 gap-4 grid grid-cols-3 bg-indigo-50 text-indigo-500 rounded-lg">
         {Object.keys(statuses).map((status, index) => {
           return (
-            <div className="flex flex-col gap-1 sm:gap-2" key={index}>
+            <div
+              className="flex flex-col gap-1 sm:gap-2"
+              key={Math.random().toString().slice(2)}
+            >
               <p className="font-medium text-xs sm:text-sm uppercase truncate">
                 {status.replaceAll("_", " ")}
               </p>
               <p className="font-fugaz text-base sm:text-lg text-wrap">
-                {statuses[status]} {status === "number_of_days" ? " 🙌" : ""}
+                {status === "average_mood" && statuses[status] < 1
+                  ? "Not calculated yet"
+                  : statuses[status]}
+                {status === "number_of_days" && statuses[status] > 0
+                  ? " 🙌"
+                  : ""}
               </p>
             </div>
           );
@@ -131,7 +142,7 @@ export default function Dashboard() {
             <button
               onClick={() => handleSetMood(moodIndex + 1)}
               className={` flex flex-col flex-1 items-center gap-2 py-4 px-6 rounded-lg purpleShadow duration-200 bg-indigo-50 text-center hover:bg-indigo-100 `}
-              key={moodIndex}
+              key={Math.random().toString().slice(2)}
             >
               <p className="text-4xl sm:text-5xl md:6xl">{moods[mood]}</p>
               <p className=" text-xs sm:text-sm md:text-base font-fugaz text-indigo-500">
