@@ -1,7 +1,6 @@
 import React from "react";
-import Link from "next/link";
-import Button from "./Button";
 import Calendar from "./Calendar";
+import Cta from "./Cta";
 
 export default function Hero() {
   return (
@@ -14,14 +13,7 @@ export default function Hero() {
         Create your mood record and visualize your
         <span className="font-semibold"> yearly and monthly</span> mood-trends
       </p>
-      <div className="grid grid-cols-2 gap-4 w-fit mx-auto">
-        <Link href={"/dashboard"}>
-          <Button text="Sign up" />
-        </Link>
-        <Link href={"/dashboard"}>
-          <Button text="Login" dark />
-        </Link>
-      </div>
+      <Cta />
       <Calendar demo />
     </div>
   );
