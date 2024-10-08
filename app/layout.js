@@ -2,6 +2,7 @@ import Link from "next/link";
 import { AuthProvider } from "@/context/AuthContext";
 import "./globals.css";
 import { fugaz, openSans } from "./fonts";
+import LogoutButton from "@/components/LogoutButton";
 
 export const metadata = {
   title: "Moody",
@@ -18,9 +19,7 @@ export default function RootLayout({ children }) {
           Moody
         </h1>
       </Link>
-      <div className="flex items-center justify-between">
-        PLACEHOLDER CTA || STATS
-      </div>
+      <LogoutButton />
     </header>
   );
 
