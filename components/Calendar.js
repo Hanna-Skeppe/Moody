@@ -24,13 +24,13 @@ const months = {
 };
 const monthsArr = Object.keys(months);
 const dayList = [
-  "Sunday",
   "Monday",
   "Tuesday",
   "Wednesday",
   "Thursday",
   "Friday",
   "Saturday",
+  "Sunday",
 ];
 
 export default function Calendar(props) {
@@ -68,53 +68,54 @@ export default function Calendar(props) {
     Object.keys(months).indexOf(selectedMonth),
     1
   );
-  const firstDayOfMonth = monthNow.getDay();
-  const daysInMonth = new Date(
-    selectedYear,
-    Object.keys(selectedMonth).indexOf(selectedMonth) + 1,
-    0
-  ).getDate();
+  const firstDayOfMonth = (monthNow.getDay() + 6) % 7;
+  const daysInMonth = new Date(selectedYear, numericMonth + 1, 0).getDate();
   const daysToDisplay = firstDayOfMonth + daysInMonth;
   const numRows = Math.floor(daysToDisplay / 7) + (daysToDisplay % 7 ? 1 : 0);
-
+  // TODO: check best way to set keys in all these map's
   return (
     <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-3 gap-4">
-        <button onClick={() => handleChangeMonth(-1)}>
+      <div className="grid grid-cols-6 gap-4 items-center">
+        <button
+          className="mr-auto w-4 h-4 sm:w-5 sm:h-5 col-span-1"
+          onClick={() => handleChangeMonth(-1)}
+        >
           <FontAwesomeIcon
-            className="w-4 h-4 text-indigo-800"
+            className="w-full h-full text-indigo-800 duration-200 hover:opacity-60"
             icon={faChevronLeft}
           />
         </button>
-        <p className="text-center capitalize text-indigo-800">
-          {selectedMonth}
+        <p className="font-fugaz text-center capitalize textGradient text-lg sm:text-xl col-span-4">
+          {selectedMonth} {selectedYear}
         </p>
 
-        <button onClick={() => handleChangeMonth(+1)}>
+        <button
+          className="ml-auto w-4 h-4 sm:w-5 sm:h-5 col-span-1"
+          onClick={() => handleChangeMonth(+1)}
+        >
           <FontAwesomeIcon
-            className="w-4 h-4 text-indigo-800"
+            className="w-full h-full text-indigo-800 duration-200 hover:opacity-60"
             icon={faChevronRight}
           />
         </button>
       </div>
       <div className="flex flex-col overflow-hidden gap-1 py-4 sm:py-6 md:py-10">
         <div className="grid grid-cols-7 gap-1 mb-5 font-medium uppercase text-xs sm:text-sm font-openSans text-indigo-800">
-          {dayList.map((day, index) => {
+          {dayList.map((day) => {
             return (
-              <>
-                <span className="md:hidden" key={index}>
-                  {day.slice(0, 3)}
-                </span>
-                <span className="hidden md:block" key={index}>
-                  {day}
-                </span>
-              </>
+              <div key={parseInt(Math.random().toString().slice(2))}>
+                <span className="md:hidden">{day.slice(0, 3)}</span>
+                <span className="hidden md:block">{day}</span>
+              </div>
             );
           })}
         </div>
         {[...Array(numRows).keys()].map((row, rowIndex) => {
           return (
-            <div key={rowIndex} className="grid grid-cols-7 gap-1">
+            <div
+              key={parseInt(Math.random().toString().slice(2))}
+              className="grid grid-cols-7 gap-1"
+            >
               {dayList.map((dayOfWeek, dayOfWeekIndex) => {
                 let dayIndex =
                   rowIndex * 7 + dayOfWeekIndex - (firstDayOfMonth - 1);
@@ -129,7 +130,12 @@ export default function Calendar(props) {
                   dayIndex === now.getDate() &&
                   now.getMonth() === monthsArr.indexOf(selectedMonth);
                 if (!dayDisplay) {
-                  return <div key={dayOfWeekIndex} className="bg-white" />;
+                  return (
+                    <div
+                      key={parseInt(Math.random().toString().slice(2))}
+                      className="bg-white"
+                    />
+                  );
                 }
                 let color = demo
                   ? gradients.indigo[baseRating[dayIndex]]
@@ -139,13 +145,13 @@ export default function Calendar(props) {
 
                 return (
                   <div
-                    className={`text-xs border p-2 flex items-center gap-2 justify-between rounded-lg ${
+                    className={`text-sm md:text-base border p-2 sm:p-3 flex items-center gap-2 justify-between rounded-lg ${
                       isToday ? "border-indigo-900" : "border-indigo-100"
                     } ${color === "white" ? "text-indigo-400" : "text-white"}`}
                     style={{ background: color }}
-                    key={dayOfWeekIndex}
+                    key={parseInt(Math.random().toString().slice(2))}
                   >
-                    <p>{dayIndex}</p>
+                    <p className="sm:pl-2">{dayIndex}</p>
                   </div>
                 );
               })}
