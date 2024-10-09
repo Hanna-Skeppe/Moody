@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-//import Button from "./Button";
 import Calendar from "./Calendar";
 import { useAuth } from "@/context/AuthContext";
 import { doc, setDoc } from "firebase/firestore";
