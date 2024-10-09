@@ -13,7 +13,6 @@ export default function LogoutButton() {
     try {
       await logOut();
     } catch (err) {
-      // TODO: Expand on this later: add an error state and handle the error in the FE
       console.log("cannot logout user:", err?.message);
     } finally {
       setIsLoggingOut(false);

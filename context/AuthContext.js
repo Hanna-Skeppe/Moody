@@ -43,19 +43,14 @@ export function AuthProvider({ children }) {
         setLoading(true);
         setCurrentUser(user);
         if (!user) {
-          console.log("No user found!");
           return;
         }
-
         // If user exists, fetch data from firestore database
-        console.log("fetching user data");
         const docRef = doc(db, "users", user.uid);
         const docSnap = await getDoc(docRef);
         let firebaseData = {};
         if (docSnap.exists()) {
-          console.log("found user data!");
           firebaseData = docSnap.data();
-          console.log(firebaseData);
           setUserDataObj(firebaseData);
         }
       } catch (err) {

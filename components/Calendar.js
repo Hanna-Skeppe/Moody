@@ -48,7 +48,6 @@ export default function Calendar(props) {
   const data = completeData?.[selectedYear]?.[numericMonth] || {};
 
   function handleChangeMonth(value) {
-    // value +1 or -1
     // if hitting the bounds of the months, adjust the year that is displayed instead.
     if (numericMonth + value < 0) {
       // set the month value to 11 and decrement the year
@@ -72,7 +71,7 @@ export default function Calendar(props) {
   const daysInMonth = new Date(selectedYear, numericMonth + 1, 0).getDate();
   const daysToDisplay = firstDayOfMonth + daysInMonth;
   const numRows = Math.floor(daysToDisplay / 7) + (daysToDisplay % 7 ? 1 : 0);
-  // TODO: check best way to set keys in all these map's
+
   return (
     <div className="flex flex-col gap-4">
       <div className="grid grid-cols-6 gap-4 items-center">
@@ -103,7 +102,7 @@ export default function Calendar(props) {
         <div className="grid grid-cols-7 gap-1 mb-5 font-medium uppercase text-xs sm:text-sm font-openSans text-indigo-800">
           {dayList.map((day) => {
             return (
-              <div key={parseInt(Math.random().toString().slice(2))}>
+              <div key={day}>
                 <span className="md:hidden">{day.slice(0, 3)}</span>
                 <span className="hidden md:block">{day}</span>
               </div>
@@ -112,11 +111,8 @@ export default function Calendar(props) {
         </div>
         {[...Array(numRows).keys()].map((row, rowIndex) => {
           return (
-            <div
-              key={parseInt(Math.random().toString().slice(2))}
-              className="grid grid-cols-7 gap-1"
-            >
-              {dayList.map((dayOfWeek, dayOfWeekIndex) => {
+            <div key={rowIndex} className="grid grid-cols-7 gap-1">
+              {dayList.map((_, dayOfWeekIndex) => {
                 let dayIndex =
                   rowIndex * 7 + dayOfWeekIndex - (firstDayOfMonth - 1);
                 let dayDisplay =
@@ -132,7 +128,7 @@ export default function Calendar(props) {
                 if (!dayDisplay) {
                   return (
                     <div
-                      key={parseInt(Math.random().toString().slice(2))}
+                      key={`${rowIndex}-${dayOfWeekIndex}`}
                       className="bg-white"
                     />
                   );
@@ -149,7 +145,7 @@ export default function Calendar(props) {
                       isToday ? "border-indigo-900" : "border-indigo-100"
                     } ${color === "white" ? "text-indigo-400" : "text-white"}`}
                     style={{ background: color }}
-                    key={parseInt(Math.random().toString().slice(2))}
+                    key={dayIndex}
                   >
                     <p className="sm:pl-2">{dayIndex}</p>
                   </div>

@@ -1,9 +1,11 @@
 import React from "react";
 
 export default function Button(props) {
-  const { text, dark, full, clickHandler, slim } = props;
+  const { text, dark, full, clickHandler, slim, type } = props;
+
   return (
     <button
+      type={type ? type : "button"}
       onClick={clickHandler}
       className={`${dark ? "text-white bg-indigo-600" : "text-indigo-600"} ${
         full ? "grid place-items-center w-full" : ""

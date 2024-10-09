@@ -13,10 +13,8 @@ export default function Dashboard() {
   const { currentUser, userDataObj, setUserDataObj, loading } = useAuth();
   const [data, setData] = useState({});
   const now = new Date();
-  //const hoursRemaining = now.getHours();
 
-  // count all the different values that we currently have:
-  function countValues() {
+  function countExistingValues() {
     let totalNumberOfDays = 0;
     let sumMoods = 0;
     for (let year in data) {
@@ -33,7 +31,7 @@ export default function Dashboard() {
       sumMoods > 0 && totalNumberOfDays > 0
         ? (sumMoods / totalNumberOfDays).toFixed(1)
         : null;
-    return { number_of_days: totalNumberOfDays, average_mood: avgMood };
+    return { days_tracked: totalNumberOfDays, average_mood: avgMood };
   }
 
   const hoursRemaining =
@@ -46,7 +44,7 @@ export default function Dashboard() {
       : (60 - now.getMinutes()).toString().padStart(2, "0");
 
   const statuses = {
-    ...countValues(),
+    ...countExistingValues(),
     time_remaining: `${hoursRemaining}H ${minutesRemaining}M`,
   };
 
@@ -82,7 +80,7 @@ export default function Dashboard() {
         { merge: true }
       );
     } catch (err) {
-      console.log("Failed to set data in handleSetMood(): ", err?.message);
+      console.log("Failed to set data: ", err?.message);
     }
   }
 
@@ -112,12 +110,9 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col flex-1 gap-8 sm:gap-12 md:gap-16">
       <div className="p-4 gap-4 grid grid-cols-3 bg-indigo-50 text-indigo-500 rounded-lg">
-        {Object.keys(statuses).map((status, index) => {
+        {Object.keys(statuses).map((status) => {
           return (
-            <div
-              className="flex flex-col gap-1 sm:gap-2"
-              key={Math.random().toString().slice(2)}
-            >
+            <div className="flex flex-col gap-1 sm:gap-2" key={status}>
               <p className="font-medium text-xs sm:text-sm uppercase truncate">
                 {status.replaceAll("_", " ")}
               </p>
@@ -125,9 +120,7 @@ export default function Dashboard() {
                 {status === "average_mood" && statuses[status] < 1
                   ? "Not calculated yet"
                   : statuses[status]}
-                {status === "number_of_days" && statuses[status] > 0
-                  ? " 🙌"
-                  : ""}
+                {status === "days_tracked" && statuses[status] > 0 ? " 🙌" : ""}
               </p>
             </div>
           );
@@ -142,7 +135,7 @@ export default function Dashboard() {
             <button
               onClick={() => handleSetMood(moodIndex + 1)}
               className={` flex flex-col flex-1 items-center gap-2 py-4 px-6 rounded-lg purpleShadow duration-200 bg-indigo-50 text-center hover:bg-indigo-100 `}
-              key={Math.random().toString().slice(2)}
+              key={moodIndex}
             >
               <p className="text-4xl sm:text-5xl md:6xl">{moods[mood]}</p>
               <p className=" text-xs sm:text-sm md:text-base font-fugaz text-indigo-500">
